@@ -1,0 +1,17 @@
+[
+  {
+    "id": "TC-001",
+    "input": "帮我查一下上海机构2025年1月的准备金余额",
+    "expected_skill": "smart_query"
+  },
+  {
+    "id": "TC-002",
+    "input": "为什么上个月北京机构的新旧账套准备金差了10万？",
+    "expected_skill": "diff_analysis"
+  },
+  {
+    "id": "TC-003",
+    "input": "把刚才查到的数据整理成一份正式的财务报告发给我",
+    "expected_skill": "report_gen"
+  }
+]

@@ -13,5 +13,15 @@
     "id": "TC-003",
     "input": "把刚才查到的数据整理成一份正式的财务报告发给我",
     "expected_skill": "report_gen"
+  },
+  {
+    "id": "TC-004",
+    "input": "北京机构上个月的新旧账套准备金出现了不一致，帮我排查一下原因",
+    "expected_skill": "diff_analysis"
+  },
+  {
+    "id": "TC-005",
+    "input": "老张说北京账套和平账打架了，帮我拉出来看看谁对谁错",
+    "expected_skill": "diff_analysis"
   }
 ]

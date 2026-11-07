@@ -16,21 +16,37 @@ loader = SkillLoader()
 llm = ChatOllama(model="qwen2.5:7b", temperature=0)
 
 # ==========================================
-# 节点 1：路由大脑（读取 agent.md 规则）
+# 节点 1：路由大脑（读取 agent.md 规则 + 历史踩坑记忆）
 # ==========================================
 def router_node(state: AgentState):
-    print("\n>>> [Router] 正在根据 config/agent.md 决定调用哪个 Skill...")
+    print("\n>>> [Router] 正在根据 config/agent.md 与 历史踩坑记忆 决定调用哪个 Skill...")
     
-    # 读取全局配置
+    # 1. 读取全局配置
     with open("config/agent.md", "r", encoding="utf-8") as f:
         agent_config = f.read()
 
+    # 2. 👇 新增：读取历史踩坑规则（记忆回注）
+    history_rules = ""
+    mem_path = "memory/reflection.json"
+    
+    if os.path.exists(mem_path):
+        try:
+            with open(mem_path, "r", encoding="utf-8") as f:
+                rules = json.load(f)
+                if rules:
+                    # 将 JSON 数组转换为带短横线的列表文本，方便大模型阅读
+                    rule_text = "\n".join([f"- {r}" for r in rules])
+                    history_rules = f"\n【历史踩坑规则（必须严格遵守）】\n{rule_text}\n"
+        except Exception as e:
+            print(f"⚠️ 读取历史记忆失败: {e}")
+
+    # 3. 组装 Prompt
     prompt = f"""
-    你是一个企业级 AI 路由专家。请严格根据以下【路由规则配置表】，判断用户输入应该使用哪个 Skill。
+    你是一个企业级 AI 路由专家。请严格根据以下【路由规则配置表】和【历史踩坑规则】，判断用户输入应该使用哪个 Skill。
     
     【路由规则配置】
     {agent_config}
-    
+    {history_rules}
     【用户输入】
     {state['user_query']}
     
